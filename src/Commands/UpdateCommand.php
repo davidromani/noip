@@ -32,15 +32,19 @@ class UpdateCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $client = new Client();
+        // welcome
+        $output->writeln('<info>Welcome to client:update command</info>');
 
-        $output->writeln("Trying to detect your IP...");
+        try {
+            $client = new Client();
 
-        $ip = file_get_contents('http://icanhazip.com/');
+            $output->writeln("Trying to detect your IP...");
 
-        $output->writeln("Your IP is:".$ip);
+            $ip = file_get_contents('http://icanhazip.com/');
 
-        $output->writeln("Submitting to NoIP.com...");
+            $output->writeln("Your IP is:".$ip);
+
+            $output->writeln("Submitting to NoIP.com...");
 
 //        $res = $client->update($ip);
 //
@@ -49,5 +53,8 @@ class UpdateCommand extends Command
 //        } else {
 //            $output->writeln("A problem has occured! DDNS was not updated.".$res);
 //        }
+        } catch (\Exception $e) {
+            $output->writeln('<error>Unable to open Client connection. Nothing done.</error>');
+        }
     }
 }
