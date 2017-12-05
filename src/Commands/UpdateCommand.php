@@ -54,17 +54,14 @@ class UpdateCommand extends Command
                 // valid IP
                 $output->writeln('<info>'.$ip.'</info>');
                 $output->write('*** updating remote IP... ');
+                // update IP
+                $res = $client->update($ip);
+                if ($res == 'OK') {
+                    $output->writeln('<info>success!</info>');
+                } else {
+                    $output->writeln('<error>a problem has occured!</error> '.$res);
+                }
             }
-
-
-
-//        $res = $client->update($ip);
-//
-//        if ($res == 'OK') {
-//            $output->writeln("Done Updating.. Success!");
-//        } else {
-//            $output->writeln("A problem has occured! DDNS was not updated.".$res);
-//        }
         } catch (\Exception $e) {
             $output->writeln('<error>Unable to open Client connection. Nothing done.</error>');
         }
