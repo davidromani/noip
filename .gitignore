@@ -1,5 +1,4 @@
 vendor/
 /docs/
 .DS_Store
-composer.lock
 .env
