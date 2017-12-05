@@ -5,8 +5,9 @@ namespace Buonzz\NoIP\Commands;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Validator\Validation;
+use Symfony\Component\Validator\Constraints\Ip;
 use Buonzz\NoIP\Client;
 
 /**
@@ -33,18 +34,29 @@ class UpdateCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         // welcome
-        $output->writeln('<info>Welcome to client:update command</info>');
+        $output->writeln('<comment>Welcome to client:update command</comment>');
 
         try {
             $client = new Client();
-
-            $output->writeln("Trying to detect your IP...");
-
+            $output->write('*** trying to detect your IP... ');
             $ip = file_get_contents('http://icanhazip.com/');
+            $ip = str_replace(array("\r", "\n"), '', $ip);
 
-            $output->writeln("Your IP is:".$ip);
+            $validator = Validation::createValidator();
+            $violations = $validator->validate($ip, array(
+                new Ip(),
+            ));
 
-            $output->writeln("Submitting to NoIP.com...");
+            if (count($violations) > 0) {
+                // invalid IP
+                $output->writeln('<error>Invalid IP. Nothing done.</error>');
+            } else {
+                // valid IP
+                $output->writeln('<info>'.$ip.'</info>');
+                $output->write('*** updating remote IP... ');
+            }
+
+
 
 //        $res = $client->update($ip);
 //
