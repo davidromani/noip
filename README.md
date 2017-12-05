@@ -107,6 +107,12 @@ Now you are ready to run the script
 noip_php client:update
 ```
 
+Or you can use it with optional input arguments instead of .env configuration. Follow this example:
+
+```
+noip_php client:update <NOIP_HOST> <NOIP_USERNAME> <NOIP_PASSWORD>
+```
+
 ### Phar Build
 
 [https://gist.github.com/buonzz/07193b92ee10e9eaac19](Install) first box in your Homestead.
