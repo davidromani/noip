@@ -22,7 +22,11 @@ class UpdateCommand extends Command
     {
         $this
             ->setName('client:update')
-            ->setDescription('Detect and submit your current IP to NoIP.com');
+            ->setDescription('Detect and submit your current IP to NoIP.com')
+            ->addArgument('host', InputArgument::OPTIONAL, 'hostname')
+            ->addArgument('username', InputArgument::OPTIONAL, 'username')
+            ->addArgument('password', InputArgument::OPTIONAL, 'password')
+        ;
     }
 
     /**
@@ -37,7 +41,7 @@ class UpdateCommand extends Command
         $output->writeln('<comment>Welcome to client:update command</comment>');
 
         try {
-            $client = new Client();
+            $client = new Client(true, $input->getArgument('host'), $input->getArgument('username'), $input->getArgument('password'));
             $output->write('*** trying to detect your IP... ');
             $ip = file_get_contents('http://icanhazip.com/');
             $ip = str_replace(array("\r", "\n"), '', $ip);

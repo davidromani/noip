@@ -1,8 +1,6 @@
 <?php namespace Buonzz\NoIP;
 
 use GuzzleHttp\Client as GClient;
-use Psr\Http\Message\ResponseInterface;
-use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Exception\ClientException;
 use Dotenv\Dotenv;
 
@@ -15,6 +13,11 @@ class Client
      * @var bool
      */
     private $use_https;
+
+    /**
+     * @var null|string
+     */
+    private $host;
 
     /**
      * @var array|false|string
@@ -39,14 +42,18 @@ class Client
      * Client constructor.
      *
      * @param bool $use_https
+     * @param null|string $host
+     * @param null|string $username
+     * @param null|string $password
      */
-    public function __construct($use_https = true)
+    public function __construct($use_https = true, $host = null, $username = null, $password = null)
     {
         $dotenv = new Dotenv(getcwd());
         $dotenv->load();
 
-        $this->username = getenv('NOIP_USERNAME');
-        $this->password = getenv('NOIP_PASSWORD');
+        $this->host = is_null($host) ? getenv('NOIP_HOST') : $host;
+        $this->username = is_null($username) ? getenv('NOIP_USERNAME') : $username;
+        $this->password = is_null($password) ? getenv('NOIP_PASSWORD') : $password;
         $this->use_https = $use_https;
 
         if ($use_https) {
@@ -60,24 +67,16 @@ class Client
 
     /**
      * @param $ip
-     * @param null $phostname
      *
      * @return string
      */
-    public function update($ip, $phostname = null)
+    public function update($ip)
     {
-        if (is_null($phostname)) {
-            $hostname = getenv('NOIP_HOST');
-        } else {
-            $hostname = $phostname;
-        }
-
-        $uri = $this->api_url."?hostname=".$hostname."&myip=".$ip;
+        $uri = $this->api_url."?hostname=".$this->host."&myip=".$ip;
         $client = new GClient(['headers' => ['User-Agent' => 'Buonzz Update Client PHP/v1.0 buonzz@gmail.com']]);
 
         try {
             $response = $client->request('GET', $uri);
-            $code = $response->getStatusCode(); // 200
             $reason = $response->getReasonPhrase(); // OK
 
             return $reason;
