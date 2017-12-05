@@ -23,7 +23,7 @@ class UpdateCommand extends Command
         $this
             ->setName('client:update')
             ->setDescription('Detect and submit your current IP to NoIP.com')
-            ->addOption('host', 'H', InputOption::VALUE_OPTIONAL, 'hostname')
+            ->addOption('hostname', 'H', InputOption::VALUE_OPTIONAL, 'hostname')
             ->addOption('username', 'u', InputOption::VALUE_OPTIONAL, 'username')
             ->addOption('password', 'p', InputOption::VALUE_OPTIONAL, 'password')
         ;
@@ -41,7 +41,7 @@ class UpdateCommand extends Command
         $output->writeln('<comment>Welcome to client:update command</comment>');
 
         try {
-            $client = new Client(true, $input->getOption('host'), $input->getOption('username'), $input->getOption('password'));
+            $client = new Client(true, $input->getOption('hostname'), $input->getOption('username'), $input->getOption('password'));
             $output->write('*** trying to detect your IP... ');
             $ip = file_get_contents('http://icanhazip.com/');
             $ip = str_replace(array("\r", "\n"), '', $ip);

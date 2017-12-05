@@ -110,7 +110,7 @@ noip_php client:update
 Or you can use it with optional input arguments instead of .env configuration. Follow this example:
 
 ```
-noip_php client:update <NOIP_HOST> <NOIP_USERNAME> <NOIP_PASSWORD>
+noip_php client:update --hostname=<NOIP_HOST> --username=<NOIP_USERNAME> --password=<NOIP_PASSWORD>
 ```
 
 ### Phar Build
