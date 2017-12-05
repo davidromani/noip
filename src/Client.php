@@ -15,7 +15,7 @@ class Client
     private $use_https;
 
     /**
-     * @var null|string
+     * @var array|false|string
      */
     private $host;
 
